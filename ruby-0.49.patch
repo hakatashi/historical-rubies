@@ -1,30 +1,6 @@
-diff -r -u ruby-0.49/Makefile ruby-0.49-patched/Makefile
---- ruby-0.49/Makefile	1994-06-03 19:20:03.000000000 +1000
-+++ ruby-0.49-patched/Makefile	2012-12-23 00:22:46.000000000 +1100
-@@ -31,7 +31,7 @@
- INSTALL_DATA = $(INSTALL) -m 644
- MAKEINFO = makeinfo
- 
--CFLAGS = -g
-+CFLAGS = -g -m32
- LDFLAGS = -static $(CFLAGS)
- LIBS =  -lm -ldbm
- DEFS =  -DHAVE_UNISTD_H=1 -DHAVE_SYSCALL_H=1 -DHAVE_A_OUT_H=1 -DDIRENT=1 -DGETGROUPS_T=int -DRETSIGTYPE=void -DHAVE_STRTOL=1 -DHAVE_STRDUP=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 -DHAVE_STRFTIME=1 -DHAVE_PUTENV=1 -DHAVE_ALLOCA_H=1 -DPW_AGE=1 -DPW_COMMENT=1
-diff -r -u ruby-0.49/Makefile.in ruby-0.49-patched/Makefile.in
---- ruby-0.49/Makefile.in	1994-07-14 12:21:42.000000000 +1000
-+++ ruby-0.49-patched/Makefile.in	2012-12-22 23:36:03.000000000 +1100
-@@ -13,7 +13,7 @@
- INSTALL_DATA = @INSTALL_DATA@
- MAKEINFO = makeinfo
- 
--CFLAGS = -g
-+CFLAGS = -g -m32
- LDFLAGS = @STATIC@ $(CFLAGS)
- LIBS = @LIBS@
- DEFS = @DEFS@
-diff -r -u ruby-0.49/array.c ruby-0.49-patched/array.c
---- ruby-0.49/array.c	1994-07-18 17:32:54.000000000 +1000
-+++ ruby-0.49-patched/array.c	2012-12-22 23:38:03.000000000 +1100
+diff -Naur ruby/array.c ruby-patched/array.c
+--- ruby/array.c	1994-07-18 16:32:54.000000000 +0900
++++ ruby-patched/array.c	2018-03-20 12:45:55.161849700 +0900
 @@ -11,6 +11,7 @@
  ************************************************/
  
@@ -57,9 +33,9 @@ diff -r -u ruby-0.49/array.c ruby-0.49-patched/array.c
      for (i=0; i<n; i++) {
  	ary->ptr[i] = va_arg(ar, VALUE);
      }
-diff -r -u ruby-0.49/bignum.c ruby-0.49-patched/bignum.c
---- ruby-0.49/bignum.c	1994-07-06 18:58:52.000000000 +1000
-+++ ruby-0.49-patched/bignum.c	2012-12-22 23:39:47.000000000 +1100
+diff -Naur ruby/bignum.c ruby-patched/bignum.c
+--- ruby/bignum.c	1994-07-06 17:58:52.000000000 +0900
++++ ruby-patched/bignum.c	2018-03-20 12:45:55.184398200 +0900
 @@ -10,6 +10,8 @@
  
  #include "ruby.h"
@@ -69,9 +45,9 @@ diff -r -u ruby-0.49/bignum.c ruby-0.49-patched/bignum.c
  
  extern VALUE C_Integer;
  VALUE C_Bignum;
-diff -r -u ruby-0.49/class.c ruby-0.49-patched/class.c
---- ruby-0.49/class.c	1994-07-18 11:49:41.000000000 +1000
-+++ ruby-0.49-patched/class.c	2012-12-22 23:39:08.000000000 +1100
+diff -Naur ruby/class.c ruby-patched/class.c
+--- ruby/class.c	1994-07-18 10:49:41.000000000 +0900
++++ ruby-patched/class.c	2018-03-20 12:45:55.193686200 +0900
 @@ -14,6 +14,8 @@
  #include "env.h"
  #include "node.h"
@@ -107,60 +83,38 @@ diff -r -u ruby-0.49/class.c ruby-0.49-patched/class.c
  
      if (*p == '*') {
  	var = va_arg(vargs, VALUE*);
-diff -r -u ruby-0.49/config.status ruby-0.49-patched/config.status
---- ruby-0.49/config.status	1994-06-03 00:54:17.000000000 +1000
-+++ ruby-0.49-patched/config.status	2012-12-22 23:36:08.000000000 +1100
-@@ -2,24 +2,24 @@
+diff -Naur ruby/config.status ruby-patched/config.status
+--- ruby/config.status	1994-06-02 23:54:17.000000000 +0900
++++ ruby-patched/config.status	2018-03-20 11:17:59.840089200 +0900
+@@ -2,7 +2,7 @@
  # Generated automatically by configure.
  # Run this file to recreate the current configuration.
  # This directory was configured as follows,
 -# on host dyna:
-+# on host Charlies-Mac-Pro.local:
++# on host DESKTOP-CHCLKIU:
  #
--# ./configure 
-+# ./configure --prefix=/Users/charlie/code/historical-rubies/tmp/ruby-0.49-patched/inst --host=
+ # ./configure 
  
- for arg
- do
-   case "$arg" in
-     -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
--    echo running ${CONFIG_SHELL-/bin/sh} ./configure 
--    exec ${CONFIG_SHELL-/bin/sh} ./configure  ;;
-+    echo running ${CONFIG_SHELL-/bin/sh} ./configure --prefix=/Users/charlie/code/historical-rubies/tmp/ruby-0.49-patched/inst --host=
-+    exec ${CONFIG_SHELL-/bin/sh} ./configure --prefix=/Users/charlie/code/historical-rubies/tmp/ruby-0.49-patched/inst --host= ;;
-     *) echo "Usage: config.status --recheck" 2>&1; exit 1 ;;
-   esac
- done
- 
- trap 'rm -f Makefile; exit 1' 1 3 15
- PROGS='ruby'
--CC='gcc'
--CPP='gcc -E'
-+CC='gcc-4.2'
-+CPP='gcc-4.2 -E'
+@@ -22,14 +22,15 @@
+ CPP='gcc -E'
  DBM='-fpcc-struct-return'
  STATIC=''
- YACC='bison -y'
-@@ -27,12 +27,14 @@
+-YACC='bison -y'
++YACC='yacc'
+ INSTALL='/usr/bin/install -c'
  INSTALL_PROGRAM='$(INSTALL)'
  INSTALL_DATA='$(INSTALL) -m 644'
  ALLOCA=''
+-LIBS=' -lm -ldbm'
 +LIBOBJS=''
- LIBS=' -lm -ldbm'
++LIBS=' -lm'
  srcdir='.'
 -DEFS=' -DHAVE_UNISTD_H=1 -DHAVE_SYSCALL_H=1 -DHAVE_A_OUT_H=1 -DDIRENT=1 -DGETGROUPS_T=gid_t -DRETSIGTYPE=void -DHAVE_GETOPT_LONG=1 -DHAVE_MEMMOVE=1 -DHAVE_STRERROR=1 -DHAVE_STRTOL=1 -DHAVE_STRTOUL=1 -DHAVE_STRDUP=1 -DHAVE_SETENV=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 -DHAVE_STRFTIME=1 -DHAVE_ALLOCA_H=1'
--prefix=''
--exec_prefix=''
--prsub=''
-+DEFS=' -DHAVE_UNISTD_H=1 -DDIRENT=1 -DGETGROUPS_T=gid_t -DRETSIGTYPE=void -DHAVE_GETOPT_LONG=1 -DHAVE_MEMMOVE=1 -DHAVE_STRERROR=1 -DHAVE_STRTOUL=1 -DHAVE_STRDUP=1 -DHAVE_STRSTR=1 -DHAVE_SETENV=1 -DHAVE_FMOD=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 -DHAVE_STRFTIME=1 -DHAVE_SOCKET=1 -DHAVE_RANDOM=1 -DHAVE_WAIT4=1 -DHAVE_WAITPID=1 -DHAVE_ALLOCA_H=1 -DHAVE_ST_BLKSIZE=1 -DHAVE_ST_BLOCKS=1 -DHAVE_ST_RDEV=1 -DPW_CHANGE=1 -DPW_CLASSS=1 -DPW_EXPIRE=1'
-+prefix='/Users/charlie/code/historical-rubies/tmp/ruby-0.49-patched/inst'
-+exec_prefix='${prefix}'
-+prsub='s%^prefix\([ 	]*\)=\([ 	]*\).*$%prefix\1=\2/Users/charlie/code/historical-rubies/tmp/ruby-0.49-patched/inst%
-+s%^exec_prefix\([ 	]*\)=\([ 	]*\).*$%exec_prefix\1=\2${prefix}%'
- extrasub=''
- 
- top_srcdir=$srcdir
-@@ -62,6 +64,7 @@
++DEFS=' -DHAVE_UNISTD_H=1 -DHAVE_SYSCALL_H=1 -DHAVE_A_OUT_H=1 -DDIRENT=1 -DGETGROUPS_T=gid_t -DRETSIGTYPE=void -DHAVE_GETOPT_LONG=1 -DHAVE_MEMMOVE=1 -DHAVE_STRERROR=1 -DHAVE_STRTOUL=1 -DHAVE_STRDUP=1 -DHAVE_STRSTR=1 -DHAVE_SETENV=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 -DHAVE_STRFTIME=1 -DHAVE_SOCKET=1 -DHAVE_RANDOM=1 -DHAVE_WAIT4=1 -DHAVE_WAITPID=1 -DHAVE_ALLOCA_H=1 -DHAVE_ST_BLKSIZE=1 -DHAVE_ST_BLOCKS=1 -DHAVE_ST_RDEV=1'
+ prefix=''
+ exec_prefix=''
+ prsub=''
+@@ -62,6 +63,7 @@
  s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
  s%@INSTALL_DATA@%$INSTALL_DATA%g
  s%@ALLOCA@%$ALLOCA%g
@@ -168,20 +122,24 @@ diff -r -u ruby-0.49/config.status ruby-0.49-patched/config.status
  s%@LIBS@%$LIBS%g
  s%@srcdir@%$srcdir%g
  s%@DEFS@%$DEFS%
-diff -r -u ruby-0.49/dbm.c ruby-0.49-patched/dbm.c
---- ruby-0.49/dbm.c	1994-07-18 17:42:13.000000000 +1000
-+++ ruby-0.49-patched/dbm.c	2012-12-22 23:43:44.000000000 +1100
-@@ -17,6 +17,7 @@
- #include <ndbm.h>
+diff -Naur ruby/dbm.c ruby-patched/dbm.c
+--- ruby/dbm.c	1994-07-18 16:42:13.000000000 +0900
++++ ruby-patched/dbm.c	2018-03-20 12:45:55.208474500 +0900
+@@ -14,9 +14,10 @@
+ 
+ #ifdef USE_DBM
+ 
+-#include <ndbm.h>
++#include <gdbm-ndbm.h>
  #include <sys/file.h>
  #include <errno.h>
 +#include <string.h>
  
  VALUE C_DBM;
  
-diff -r -u ruby-0.49/dict.c ruby-0.49-patched/dict.c
---- ruby-0.49/dict.c	1994-07-18 17:36:12.000000000 +1000
-+++ ruby-0.49-patched/dict.c	2012-12-22 23:43:55.000000000 +1100
+diff -Naur ruby/dict.c ruby-patched/dict.c
+--- ruby/dict.c	1994-07-18 16:36:12.000000000 +0900
++++ ruby-patched/dict.c	2018-03-20 12:45:55.220242100 +0900
 @@ -12,6 +12,7 @@
  
  #include "ruby.h"
@@ -190,9 +148,9 @@ diff -r -u ruby-0.49/dict.c ruby-0.49-patched/dict.c
  
  VALUE C_Dict, C_EnvDict;
  static ID hash, eq;
-diff -r -u ruby-0.49/dir.c ruby-0.49-patched/dir.c
---- ruby-0.49/dir.c	1994-07-05 16:28:16.000000000 +1000
-+++ ruby-0.49-patched/dir.c	2012-12-23 00:52:35.000000000 +1100
+diff -Naur ruby/dir.c ruby-patched/dir.c
+--- ruby/dir.c	1994-07-05 15:28:16.000000000 +0900
++++ ruby-patched/dir.c	2018-03-20 12:45:55.227637900 +0900
 @@ -11,6 +11,7 @@
  ************************************************/
  
@@ -210,10 +168,10 @@ diff -r -u ruby-0.49/dir.c ruby-0.49-patched/dir.c
  
      return str_new2(path);
  }
-diff -r -u ruby-0.49/dln.c ruby-0.49-patched/dln.c
---- ruby-0.49/dln.c	1994-06-18 00:23:49.000000000 +1000
-+++ ruby-0.49-patched/dln.c	2012-12-22 23:48:27.000000000 +1100
-@@ -16,6 +16,7 @@
+diff -Naur ruby/dln.c ruby-patched/dln.c
+--- ruby/dln.c	1994-06-17 23:23:49.000000000 +0900
++++ ruby-patched/dln.c	2018-03-20 12:45:55.249641500 +0900
+@@ -16,13 +16,14 @@
  #include "defines.h"
  #include "dln.h"
  #include <sys/types.h>
@@ -221,10 +179,18 @@ diff -r -u ruby-0.49/dln.c ruby-0.49-patched/dln.c
  #ifdef HAVE_UNISTD_H
  #include <unistd.h>
  #endif
-diff -r -u ruby-0.49/error.c ruby-0.49-patched/error.c
---- ruby-0.49/error.c	1994-07-11 12:57:28.000000000 +1000
-+++ ruby-0.49-patched/error.c	2012-12-22 23:49:22.000000000 +1100
-@@ -13,7 +13,9 @@
+ 
+ char *strdup();
+ 
+-extern int errno;
++#include <errno.h>
+ int dln_errno;
+ 
+ static int dln_init_p = 0;
+diff -Naur ruby/error.c ruby-patched/error.c
+--- ruby/error.c	1994-07-11 11:57:28.000000000 +0900
++++ ruby-patched/error.c	2018-03-20 12:45:55.264066100 +0900
+@@ -13,7 +13,10 @@
  #include "ruby.h"
  #include "env.h"
  #include <stdio.h>
@@ -232,10 +198,11 @@ diff -r -u ruby-0.49/error.c ruby-0.49-patched/error.c
 +#include <string.h>
 +#include <stdarg.h>
 +#include <stdlib.h>
++#include <errno.h>
  
  extern char *sourcefile;
  extern int   sourceline;
-@@ -53,73 +55,67 @@
+@@ -53,73 +56,67 @@
      }
  }
  
@@ -323,9 +290,17 @@ diff -r -u ruby-0.49/error.c ruby-0.49-patched/error.c
      vsprintf(buf, fmt, args);
      va_end(args);
  
-diff -r -u ruby-0.49/eval.c ruby-0.49-patched/eval.c
---- ruby-0.49/eval.c	1994-07-18 19:06:31.000000000 +1000
-+++ ruby-0.49-patched/eval.c	2012-12-22 23:43:08.000000000 +1100
+@@ -130,7 +127,6 @@
+     char *mesg;
+ {
+     char buf[BUFSIZ];
+-    extern int errno;
+ 
+     if (mesg == Qnil)
+ 	sprintf(buf, "%s.\n", strerror(errno));
+diff -Naur ruby/eval.c ruby-patched/eval.c
+--- ruby/eval.c	1994-07-18 18:06:31.000000000 +0900
++++ ruby-patched/eval.c	2018-03-20 12:45:55.305333300 +0900
 @@ -15,6 +15,8 @@
  #include "node.h"
  #include "ident.h"
@@ -361,9 +336,9 @@ diff -r -u ruby-0.49/eval.c ruby-0.49-patched/eval.c
  	for (i=1;i<argc;i++) {
  	    argv[i] = va_arg(ar, VALUE);
  	}
-diff -r -u ruby-0.49/file.c ruby-0.49-patched/file.c
---- ruby-0.49/file.c	1994-07-01 02:06:43.000000000 +1000
-+++ ruby-0.49-patched/file.c	2012-12-22 23:44:26.000000000 +1100
+diff -Naur ruby/file.c ruby-patched/file.c
+--- ruby/file.c	1994-07-01 01:06:43.000000000 +0900
++++ ruby-patched/file.c	2018-03-20 12:45:55.326447400 +0900
 @@ -13,6 +13,7 @@
  
  #include "ruby.h"
@@ -372,9 +347,9 @@ diff -r -u ruby-0.49/file.c ruby-0.49-patched/file.c
  #include <sys/time.h>
  #include <sys/param.h>
  #ifdef HAVE_UNISTD_H
-diff -r -u ruby-0.49/gc.c ruby-0.49-patched/gc.c
---- ruby-0.49/gc.c	1994-07-11 12:57:26.000000000 +1000
-+++ ruby-0.49-patched/gc.c	2012-12-23 00:54:21.000000000 +1100
+diff -Naur ruby/gc.c ruby-patched/gc.c
+--- ruby/gc.c	1994-07-11 11:57:26.000000000 +0900
++++ ruby-patched/gc.c	2018-03-20 12:45:55.338211600 +0900
 @@ -14,6 +14,8 @@
  #include "env.h"
  #include "st.h"
@@ -384,9 +359,9 @@ diff -r -u ruby-0.49/gc.c ruby-0.49-patched/gc.c
  
  void *malloc();
  void *calloc();
-diff -r -u ruby-0.49/io.c ruby-0.49-patched/io.c
---- ruby-0.49/io.c	1994-07-16 01:59:17.000000000 +1000
-+++ ruby-0.49-patched/io.c	2012-12-23 01:01:58.000000000 +1100
+diff -Naur ruby/io.c ruby-patched/io.c
+--- ruby/io.c	1994-07-16 00:59:17.000000000 +0900
++++ ruby-patched/io.c	2018-03-20 12:45:55.366851600 +0900
 @@ -14,6 +14,8 @@
  #include "io.h"
  #include <ctype.h>
@@ -414,9 +389,162 @@ diff -r -u ruby-0.49/io.c ruby-0.49-patched/io.c
  #else
  # ifdef __SLBF
  #   define READ_PENDING(fp) ((fp)->_r > 0)
-diff -r -u ruby-0.49/numeric.c ruby-0.49-patched/numeric.c
---- ruby-0.49/numeric.c	1994-07-11 14:06:31.000000000 +1000
-+++ ruby-0.49-patched/numeric.c	2012-12-22 23:50:11.000000000 +1100
+diff -Naur ruby/Makefile ruby-patched/Makefile
+--- ruby/Makefile	1994-06-03 18:20:03.000000000 +0900
++++ ruby-patched/Makefile	2018-03-20 12:52:21.491449100 +0900
+@@ -1,21 +1,4 @@
+ # Generated automatically from Makefile.in by configure.
+-# Main Makefile for GNU m4.
+-# Copyright (C) 1992 Free Software Foundation, Inc.
+-
+-# This program is free software; you can redistribute it and/or modify
+-# it under the terms of the GNU General Public License as published by
+-# the Free Software Foundation; either version 2, or (at your option)
+-# any later version.
+-
+-# This program is distributed in the hope that it will be useful,
+-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-# GNU General Public License for more details.
+-
+-# You should have received a copy of the GNU General Public License
+-# along with this program; if not, write to the Free Software
+-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+-
+ SHELL = /bin/sh
+ 
+ #### Start of system configuration section. ####
+@@ -23,18 +6,18 @@
+ srcdir = .
+ VPATH = .
+ 
+-CC = gcc -traditional
++CC = gcc
+ DBM = -fpcc-struct-return
+-YACC = bison -y
++YACC = yacc
+ INSTALL = /usr/bin/install -c
+ INSTALL_PROGRAM = $(INSTALL)
+ INSTALL_DATA = $(INSTALL) -m 644
+ MAKEINFO = makeinfo
+ 
+-CFLAGS = -g
+-LDFLAGS = -static $(CFLAGS)
+-LIBS =  -lm -ldbm
+-DEFS =  -DHAVE_UNISTD_H=1 -DHAVE_SYSCALL_H=1 -DHAVE_A_OUT_H=1 -DDIRENT=1 -DGETGROUPS_T=int -DRETSIGTYPE=void -DHAVE_STRTOL=1 -DHAVE_STRDUP=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 -DHAVE_STRFTIME=1 -DHAVE_PUTENV=1 -DHAVE_ALLOCA_H=1 -DPW_AGE=1 -DPW_COMMENT=1
++CFLAGS = -g -m32
++LDFLAGS =  $(CFLAGS)
++LIBS =  -lm
++DEFS =  -DHAVE_UNISTD_H=1 -DHAVE_SYSCALL_H=1 -DHAVE_A_OUT_H=1 -DDIRENT=1 -DGETGROUPS_T=gid_t -DRETSIGTYPE=void -DHAVE_GETOPT_LONG=1 -DHAVE_MEMMOVE=1 -DHAVE_STRERROR=1 -DHAVE_STRTOUL=1 -DHAVE_STRDUP=1 -DHAVE_STRSTR=1 -DHAVE_SETENV=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 -DHAVE_STRFTIME=1 -DHAVE_SOCKET=1 -DHAVE_RANDOM=1 -DHAVE_WAIT4=1 -DHAVE_WAITPID=1 -DHAVE_ALLOCA_H=1 -DHAVE_ST_BLKSIZE=1 -DHAVE_ST_BLOCKS=1 -DHAVE_ST_RDEV=1
+ 
+ prefix = /usr/local
+ binprefix = 
+@@ -59,7 +42,7 @@
+ 		version.h
+ 
+ SRCS          = array.c \
+-		autoexec.c \
++		bignum.c \
+ 		class.c \
+ 		compar.c \
+ 		dbm.c \
+@@ -97,7 +80,7 @@
+ 		version.c
+ 
+ OBJS	      = array.o \
+-		autoexec.o \
++		bignum.o \
+ 		class.o \
+ 		compar.o \
+ 		dbm.o \
+@@ -143,10 +126,10 @@
+ all:		$(PROGRAM)
+ 
+ $(PROGRAM):     $(OBJS)
+-		@echo -n "Loading $(PROGRAM) ... "
+-		@rm -f $(PROGRAM)
+-		@$(CC) $(LDFLAGS) $(OBJS) $(LIBS) -o $(PROGRAM)
+-		@echo "done"
++		echo -n "Loading $(PROGRAM) ... "
++		rm -f $(PROGRAM)
++		$(CC) $(LDFLAGS) $(OBJS) $(LIBS) -o $(PROGRAM)
++		echo "done"
+ 
+ install: $(PROGMAM)
+ 	$(INSTALL_PROGRAM) $(PROGRAM) $(bindir)/$(PROGRAM)
+@@ -162,28 +145,31 @@
+ # Prevent GNU make v3 from overflowing arg limit on SysV.
+ .NOEXPORT:
+ ###
++parse.o : parse.y ruby.h defines.h env.h ident.h node.h st.h regex.h 
++###
+ array.o : array.c ruby.h defines.h 
+-autoexec.o : autoexec.c ruby.h defines.h 
+-class.o : class.c ruby.h defines.h node.h st.h 
++bignum.o : bignum.c ruby.h defines.h 
++class.o : class.c ruby.h defines.h env.h node.h st.h 
+ compar.o : compar.c ruby.h defines.h 
+ dbm.o : dbm.c ruby.h defines.h 
+ dict.o : dict.c ruby.h defines.h st.h 
+ dir.o : dir.c ruby.h defines.h 
+ dln.o : dln.c defines.h dln.h 
+ enum.o : enum.c ruby.h defines.h 
+-error.o : error.c ruby.h defines.h 
++error.o : error.c ruby.h defines.h env.h 
+ etc.o : etc.c ruby.h defines.h 
+-eval.o : eval.c ruby.h defines.h node.h ident.h st.h 
++eval.o : eval.c ruby.h defines.h env.h node.h ident.h st.h 
+ file.o : file.c ruby.h defines.h io.h 
+-gc.o : gc.c ruby.h defines.h st.h 
++gc.o : gc.c ruby.h defines.h env.h st.h 
+ inits.o : inits.c 
+ io.o : io.c ruby.h defines.h io.h 
+ math.o : math.c ruby.h defines.h 
+-methods.o : methods.c ruby.h defines.h node.h 
++methods.o : methods.c ruby.h defines.h env.h node.h 
+ missing.o : missing.c ruby.h defines.h missing/memmove.c missing/strerror.c \
+-  missing/strtoul.c missing/strftime.c missing/getopt.h missing/getopt.c missing/getopt1.c 
+-numeric.o : numeric.c ruby.h defines.h 
+-object.o : object.c ruby.h defines.h 
++  missing/strtoul.c missing/strftime.c missing/strstr.c missing/getopt.h missing/getopt.c \
++  missing/getopt1.c missing/mkdir.c 
++numeric.o : numeric.c ruby.h defines.h env.h 
++object.o : object.c ruby.h defines.h env.h node.h st.h 
+ pack.o : pack.c ruby.h defines.h 
+ process.o : process.c ruby.h defines.h st.h 
+ random.o : random.c ruby.h defines.h 
+@@ -191,12 +177,11 @@
+ re.o : re.c ruby.h defines.h re.h regex.h 
+ regex.o : regex.c regex.h 
+ ruby.o : ruby.c ruby.h defines.h re.h regex.h missing/getopt.h 
+-socket.o : socket.c ruby.h defines.h io.h 
++socket.o : socket.c ruby.h defines.h 
+ sprintf.o : sprintf.c ruby.h defines.h 
+ st.o : st.c st.h 
+ string.o : string.c ruby.h defines.h re.h regex.h 
+-struct.o : struct.c ruby.h defines.h 
++struct.o : struct.c ruby.h defines.h env.h 
+ time.o : time.c ruby.h defines.h 
+-variable.o : variable.c ruby.h defines.h st.h ident.h 
+-version.o : version.c ruby.h defines.h \
+-  version.h
++variable.o : variable.c ruby.h defines.h env.h node.h ident.h st.h 
++version.o : version.c ruby.h defines.h version.h 
+diff -Naur ruby/Makefile.in ruby-patched/Makefile.in
+--- ruby/Makefile.in	1994-07-14 11:21:42.000000000 +0900
++++ ruby-patched/Makefile.in	2018-03-20 11:16:50.155527000 +0900
+@@ -13,7 +13,7 @@
+ INSTALL_DATA = @INSTALL_DATA@
+ MAKEINFO = makeinfo
+ 
+-CFLAGS = -g
++CFLAGS = -g -m32
+ LDFLAGS = @STATIC@ $(CFLAGS)
+ LIBS = @LIBS@
+ DEFS = @DEFS@
+diff -Naur ruby/numeric.c ruby-patched/numeric.c
+--- ruby/numeric.c	1994-07-11 13:06:31.000000000 +0900
++++ ruby-patched/numeric.c	2018-03-20 12:45:55.571518000 +0900
 @@ -13,6 +13,7 @@
  #include "ruby.h"
  #include "env.h"
@@ -425,9 +553,9 @@ diff -r -u ruby-0.49/numeric.c ruby-0.49-patched/numeric.c
  
  static ID coerce;
  static ID to_i;
-diff -r -u ruby-0.49/object.c ruby-0.49-patched/object.c
---- ruby-0.49/object.c	1994-07-18 19:07:03.000000000 +1000
-+++ ruby-0.49-patched/object.c	2012-12-22 23:52:37.000000000 +1100
+diff -Naur ruby/object.c ruby-patched/object.c
+--- ruby/object.c	1994-07-18 18:07:03.000000000 +0900
++++ ruby-patched/object.c	2018-03-20 12:45:55.584471800 +0900
 @@ -15,6 +15,7 @@
  #include "node.h"
  #include "st.h"
@@ -436,9 +564,9 @@ diff -r -u ruby-0.49/object.c ruby-0.49-patched/object.c
  
  VALUE C_Kernel;
  VALUE C_Object;
-diff -r -u ruby-0.49/pack.c ruby-0.49-patched/pack.c
---- ruby-0.49/pack.c	1994-07-12 14:49:54.000000000 +1000
-+++ ruby-0.49-patched/pack.c	2012-12-23 00:11:26.000000000 +1100
+diff -Naur ruby/pack.c ruby-patched/pack.c
+--- ruby/pack.c	1994-07-12 13:49:54.000000000 +0900
++++ ruby-patched/pack.c	2018-03-20 12:45:55.601108100 +0900
 @@ -13,6 +13,7 @@
  #include "ruby.h"
  #include <ctype.h>
@@ -559,9 +687,9 @@ diff -r -u ruby-0.49/pack.c ruby-0.49-patched/pack.c
  		Fary_push(ary, int2inum(tmp));
  	    }
  	    break;
-diff -r -u ruby-0.49/parse.y ruby-0.49-patched/parse.y
---- ruby-0.49/parse.y	1994-07-18 18:57:30.000000000 +1000
-+++ ruby-0.49-patched/parse.y	2012-12-22 23:55:06.000000000 +1100
+diff -Naur ruby/parse.y ruby-patched/parse.y
+--- ruby/parse.y	1994-07-18 17:57:30.000000000 +0900
++++ ruby-patched/parse.y	2018-03-20 11:16:50.227437200 +0900
 @@ -17,6 +17,7 @@
  #include "env.h"
  #include "node.h"
@@ -570,9 +698,9 @@ diff -r -u ruby-0.49/parse.y ruby-0.49-patched/parse.y
  
  #include "ident.h"
  #define is_id_nonop(id) ((id)>LAST_TOKEN)
-diff -r -u ruby-0.49/process.c ruby-0.49-patched/process.c
---- ruby-0.49/process.c	1994-07-18 13:08:44.000000000 +1000
-+++ ruby-0.49-patched/process.c	2012-12-23 00:47:55.000000000 +1100
+diff -Naur ruby/process.c ruby-patched/process.c
+--- ruby/process.c	1994-07-18 12:08:44.000000000 +0900
++++ ruby-patched/process.c	2018-03-20 12:45:55.618729600 +0900
 @@ -17,6 +17,9 @@
  #include <signal.h>
  #include <sys/time.h>
@@ -641,9 +769,9 @@ diff -r -u ruby-0.49/process.c ruby-0.49-patched/process.c
  
      return Qnil;
  }
-diff -r -u ruby-0.49/re.c ruby-0.49-patched/re.c
---- ruby-0.49/re.c	1994-07-07 16:17:07.000000000 +1000
-+++ ruby-0.49-patched/re.c	2012-12-23 00:54:55.000000000 +1100
+diff -Naur ruby/re.c ruby-patched/re.c
+--- ruby/re.c	1994-07-07 15:17:07.000000000 +0900
++++ ruby-patched/re.c	2018-03-20 12:45:55.639337800 +0900
 @@ -12,6 +12,8 @@
  
  #include "ruby.h"
@@ -653,9 +781,9 @@ diff -r -u ruby-0.49/re.c ruby-0.49-patched/re.c
  
  /* Generate compiled regular expressions */
  #if 'a' == 97   /* it's ascii */
-diff -r -u ruby-0.49/regex.c ruby-0.49-patched/regex.c
---- ruby-0.49/regex.c	1994-07-07 17:14:19.000000000 +1000
-+++ ruby-0.49-patched/regex.c	2012-12-23 00:03:31.000000000 +1100
+diff -Naur ruby/regex.c ruby-patched/regex.c
+--- ruby/regex.c	1994-07-07 16:14:19.000000000 +0900
++++ ruby-patched/regex.c	2018-03-20 12:45:55.700970500 +0900
 @@ -29,6 +29,9 @@
  /* We write fatal error messages on standard error.  */
  #include <stdio.h>
@@ -666,9 +794,9 @@ diff -r -u ruby-0.49/regex.c ruby-0.49-patched/regex.c
  /* isalpha(3) etc. are used for the character classes.  */
  #include <ctype.h>
  
-diff -r -u ruby-0.49/ruby.c ruby-0.49-patched/ruby.c
---- ruby-0.49/ruby.c	1994-07-16 02:10:56.000000000 +1000
-+++ ruby-0.49-patched/ruby.c	2012-12-23 00:00:26.000000000 +1100
+diff -Naur ruby/ruby.c ruby-patched/ruby.c
+--- ruby/ruby.c	1994-07-16 01:10:56.000000000 +0900
++++ ruby-patched/ruby.c	2018-03-20 12:45:55.711998800 +0900
 @@ -13,6 +13,8 @@
  #include "ruby.h"
  #include "re.h"
@@ -678,9 +806,9 @@ diff -r -u ruby-0.49/ruby.c ruby-0.49-patched/ruby.c
  #include <sys/file.h>
  #include <sys/types.h>
  #include <sys/stat.h>
-diff -r -u ruby-0.49/ruby.h ruby-0.49-patched/ruby.h
---- ruby-0.49/ruby.h	1994-07-15 12:17:25.000000000 +1000
-+++ ruby-0.49-patched/ruby.h	2012-12-22 23:57:03.000000000 +1100
+diff -Naur ruby/ruby.h ruby-patched/ruby.h
+--- ruby/ruby.h	1994-07-15 11:17:25.000000000 +0900
++++ ruby-patched/ruby.h	2018-03-20 11:16:50.243819600 +0900
 @@ -21,9 +21,7 @@
  #define const
  #endif
@@ -704,9 +832,9 @@ diff -r -u ruby-0.49/ruby.h ruby-0.49-patched/ruby.h
  
  VALUE rb_yield();
  
-diff -r -u ruby-0.49/socket.c ruby-0.49-patched/socket.c
---- ruby-0.49/socket.c	1994-07-07 00:55:06.000000000 +1000
-+++ ruby-0.49-patched/socket.c	2012-12-23 00:00:38.000000000 +1100
+diff -Naur ruby/socket.c ruby-patched/socket.c
+--- ruby/socket.c	1994-07-06 23:55:06.000000000 +0900
++++ ruby-patched/socket.c	2018-03-20 12:45:55.730174400 +0900
 @@ -12,6 +12,7 @@
  #ifdef HAVE_SOCKET
  #include "io.h"
@@ -715,9 +843,9 @@ diff -r -u ruby-0.49/socket.c ruby-0.49-patched/socket.c
  #include <sys/types.h>
  #include <sys/socket.h>
  #include <netinet/in.h>
-diff -r -u ruby-0.49/sprintf.c ruby-0.49-patched/sprintf.c
---- ruby-0.49/sprintf.c	1994-07-15 12:20:52.000000000 +1000
-+++ ruby-0.49-patched/sprintf.c	2012-12-23 00:03:19.000000000 +1100
+diff -Naur ruby/sprintf.c ruby-patched/sprintf.c
+--- ruby/sprintf.c	1994-07-15 11:20:52.000000000 +0900
++++ ruby-patched/sprintf.c	2018-03-20 12:45:55.740624900 +0900
 @@ -12,6 +12,9 @@
  
  #include "ruby.h"
@@ -728,9 +856,9 @@ diff -r -u ruby-0.49/sprintf.c ruby-0.49-patched/sprintf.c
  
  static void fmt_setup();
  
-diff -r -u ruby-0.49/st.c ruby-0.49-patched/st.c
---- ruby-0.49/st.c	1994-06-28 01:48:41.000000000 +1000
-+++ ruby-0.49-patched/st.c	2012-12-23 00:53:19.000000000 +1100
+diff -Naur ruby/st.c ruby-patched/st.c
+--- ruby/st.c	1994-06-28 00:48:41.000000000 +0900
++++ ruby-patched/st.c	2018-03-20 12:45:55.751871400 +0900
 @@ -6,6 +6,7 @@
  #endif
  
@@ -739,18 +867,18 @@ diff -r -u ruby-0.49/st.c ruby-0.49-patched/st.c
  #include "st.h"
  
  extern void *xmalloc();
-diff -r -u ruby-0.49/st.h ruby-0.49-patched/st.h
---- ruby-0.49/st.h	1994-06-28 17:18:50.000000000 +1000
-+++ ruby-0.49-patched/st.h	2012-12-23 00:53:54.000000000 +1100
+diff -Naur ruby/st.h ruby-patched/st.h
+--- ruby/st.h	1994-06-28 16:18:50.000000000 +0900
++++ ruby-patched/st.h	2018-03-20 11:16:50.254667800 +0900
 @@ -54,4 +54,4 @@
  
  int st_strhash();
  
 -#endif ST_INCLUDED
 +#endif
-diff -r -u ruby-0.49/string.c ruby-0.49-patched/string.c
---- ruby-0.49/string.c	1994-07-15 15:19:04.000000000 +1000
-+++ ruby-0.49-patched/string.c	2012-12-23 00:01:03.000000000 +1100
+diff -Naur ruby/string.c ruby-patched/string.c
+--- ruby/string.c	1994-07-15 14:19:04.000000000 +0900
++++ ruby-patched/string.c	2018-03-20 12:45:55.781059100 +0900
 @@ -14,6 +14,7 @@
  #include "re.h"
  
@@ -759,9 +887,9 @@ diff -r -u ruby-0.49/string.c ruby-0.49-patched/string.c
  #include <ctype.h>
  
  VALUE C_String;
-diff -r -u ruby-0.49/struct.c ruby-0.49-patched/struct.c
---- ruby-0.49/struct.c	1994-07-18 18:06:54.000000000 +1000
-+++ ruby-0.49-patched/struct.c	2012-12-22 23:48:08.000000000 +1100
+diff -Naur ruby/struct.c ruby-patched/struct.c
+--- ruby/struct.c	1994-07-18 17:06:54.000000000 +0900
++++ ruby-patched/struct.c	2018-03-20 12:45:55.789398000 +0900
 @@ -10,6 +10,8 @@
  
  #include "ruby.h"
@@ -802,9 +930,9 @@ diff -r -u ruby-0.49/struct.c ruby-0.49-patched/struct.c
      GC_UNLINK;
  
      return st;
-diff -r -u ruby-0.49/time.c ruby-0.49-patched/time.c
---- ruby-0.49/time.c	1994-07-18 18:41:08.000000000 +1000
-+++ ruby-0.49-patched/time.c	2012-12-23 00:51:30.000000000 +1100
+diff -Naur ruby/time.c ruby-patched/time.c
+--- ruby/time.c	1994-07-18 17:41:08.000000000 +0900
++++ ruby-patched/time.c	2018-03-20 12:45:55.802028900 +0900
 @@ -11,6 +11,8 @@
  ************************************************/
  
@@ -814,9 +942,9 @@ diff -r -u ruby-0.49/time.c ruby-0.49-patched/time.c
  #include <sys/types.h>
  #include <sys/time.h>
  #include <sys/times.h>
-diff -r -u ruby-0.49/variable.c ruby-0.49-patched/variable.c
---- ruby-0.49/variable.c	1994-07-15 12:20:51.000000000 +1000
-+++ ruby-0.49-patched/variable.c	2012-12-23 00:01:46.000000000 +1100
+diff -Naur ruby/variable.c ruby-patched/variable.c
+--- ruby/variable.c	1994-07-15 11:20:51.000000000 +0900
++++ ruby-patched/variable.c	2018-03-20 12:45:55.814231000 +0900
 @@ -13,6 +13,7 @@
  #include "node.h"
  #include "ident.h"
